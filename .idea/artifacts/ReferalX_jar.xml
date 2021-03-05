@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ReferalX:jar">
+    <output-path>$PROJECT_DIR$/../BuildTools/plugins</output-path>
+    <root id="archive" name="ReferalX_jar.jar">
+      <element id="module-output" name="ReferalX" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../BuildTools/spigot-1.16.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../APIs/LuckPerms.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
