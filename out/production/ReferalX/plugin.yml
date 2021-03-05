@@ -1,0 +1,15 @@
+name: Referal
+version: 1.0
+description: Referal, made for CodexCraft, by vN1t
+author: vN1t
+main: com.vinitshub.referalx.ReferalX
+commands:
+  referalconnect:
+    usage: </command>
+    description: Use this command to refer your account to the referers's account
+  referalreset:
+    usage: </command>
+    description: Use this command to remove your account from the referers's account
+  referalcode:
+    usage: </command>
+    description: Use this command to get your ReferXCode
