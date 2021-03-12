@@ -1,20 +1,32 @@
 package com.vinitshub.referalx.database;
 import java.sql.*;
-import java.util.Locale;
 
 public class MySQL {
+    /*
+    Declaring SQL Variables to connect to the MySQL Database
+     */
     //region >-Variables-<
     String host = "localhost";
     String daba = "Ref";
     String port = "3306";
     String user = "root";
     String pass = "root";
-    private Connection connection;
+    Connection connection;
     //endregion
+    /*
+        Functions used to carry out data processes
+        All SQL Stuff is done here, and then used outside
+        First, I make an constructor of this class in Main Class
+        and then use Main Class's instance using ReferalX#getInstance()
+     */
     //region >-SQL-<
+
+    /**Checks if plugin is connected to the SQL Connection */
     public boolean isConnected() {
         return (connection != null);
     }
+
+    /**Connect to the SQL Server using the credentials */
     public void connect() throws SQLException, ClassNotFoundException {
         if (!isConnected()) {
             connection = DriverManager.getConnection("jdbc:mysql://" +
@@ -22,6 +34,8 @@ public class MySQL {
                     user, pass);
         }
     }
+
+    /**Disconnect from the SQL Connection */
     public void disconnect() {
         if (isConnected()) {
             try {
@@ -31,9 +45,13 @@ public class MySQL {
             }
         }
     }
+
+    /**Used to get the instance of the connection to prepare statments and stuff */
     public Connection getConnection() {
         return connection;
     }
+
+    /**Creates Table to store the data, creates everytime the plugin loads, wont create if already exists */
     public void createTable() {
         try {
             PreparedStatement ps = getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS REFERAL (" +
@@ -50,8 +68,10 @@ public class MySQL {
         }
 
     }
+
+    /**Inserting Data to the table [PLAYERNAME, PLAYERUUID, ISLINKED, LINKEDTO] */
     public void insertData(String PLAYERNAME, String PLAYERUUID, String ISLINKED, int LINKEDTO) throws SQLException {
-        if(!exists(PLAYERUUID)) {
+        if(exists(PLAYERUUID)) {
             PreparedStatement ps = getConnection().prepareStatement
                     ("INSERT INTO referal (PLAYERNAME, PLAYERUUID, ISLINKED, LINKEDTO)" +
                             "VALUES (?, ?, ?, ?);");
@@ -62,13 +82,18 @@ public class MySQL {
             ps.executeUpdate();
         }
     }
+
+    /**Checks if player has joined and is present in the Table
+     * INVERTED ON 12/03/2021*/
     public boolean exists(String PLAYERUUID) throws SQLException {
         PreparedStatement ps = getConnection().prepareStatement
                 ("SELECT * FROM REFERAL WHERE PLAYERUUID=?");
         ps.setString(1, PLAYERUUID);
         ResultSet rs = ps.executeQuery();
-        return rs.next();
+        return !rs.next();
     }
+
+    /**Gets the code using PLAYER's UUID, used in com.vinitshub.referalx.commands.ReferalCode */
     public int getCode(String PLAYERUUID) throws SQLException {
         PreparedStatement ps = getConnection().prepareStatement
                 ("SELECT ID FROM referal WHERE PLAYERUUID=?;");
@@ -77,6 +102,8 @@ public class MySQL {
         rs.next();
         return rs.getInt("ID");
     }
+
+    /**Sets the LinkedCode to the one given in args, mostly after the player resets */
     public void setLinkedTo(String PLAYERUUID, int LINKEDTO) throws SQLException {
         PreparedStatement ps = getConnection().prepareStatement
                 ("UPDATE referal SET LINKEDTO=?, ISLINKED='TRUE' WHERE PLAYERUUID=?");
@@ -84,6 +111,8 @@ public class MySQL {
         ps.setString(2, PLAYERUUID);
         ps.executeUpdate();
     }
+
+    /**Gets the LinkedCode to give the rewards to player, used in com.vinitshub.referalx.events.Events */
     public int getLinkedTo(String PLAYERUUID) throws SQLException {
         PreparedStatement ps = getConnection().prepareStatement
                 ("SELECT LINKEDTO FROM referal WHERE PLAYERUUID=?");
@@ -93,19 +122,21 @@ public class MySQL {
         return rs.getInt("LINKEDTO");
         return 0;
     }
+
+    /**Resets the LinkedCode (Used as command /referalReset) used in com.vinitshub.referalx.events.Events */
     public void resetLinked(String PLAYERUUID) throws SQLException {
         setLinkedTo(PLAYERUUID, 0);
     }
+
+    /**Returns if the Player has linked their account to others */
     public boolean isLinked(String PLAYERUUID) throws SQLException {
         PreparedStatement ps = getConnection().prepareStatement
                 ("SELECT * FROM REFERAL WHERE PLAYERUUID=?");
         ps.setString(1, PLAYERUUID);
         ResultSet rs = ps.executeQuery();
         rs.next();
-        if(rs.getString("ISLINKED").equalsIgnoreCase("true")){
-            return true;
-        }
-        return false;
+        return rs.getString("ISLINKED").equalsIgnoreCase("true");
     }
+
     //endregion
 }

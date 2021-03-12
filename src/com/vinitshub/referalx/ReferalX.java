@@ -8,11 +8,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 import static org.bukkit.ChatColor.*;
 
 public class ReferalX extends JavaPlugin {
     public MySQL SQL;
+
+    private static ReferalX instance;
+    public static ReferalX getInstance(){
+        return instance;
+    }
+
     @Override
     public void onEnable() {
         Bukkit.getServer().getConsoleSender().sendMessage(GREEN + ">-ReferalX has start-<");
@@ -24,10 +31,17 @@ public class ReferalX extends JavaPlugin {
         }
         if(SQL.isConnected()){
             Bukkit.getServer().getConsoleSender().sendMessage(GREEN + ">-Referal Database Connected-<");
+            instance = this;
             SQL.createTable();
-            this.getCommand("referalconnect").setExecutor(new ReferalConnect());
-            this.getCommand("referalreset").setExecutor(new ReferalReset());
-            this.getCommand("referalcode").setExecutor(new ReferalCode());
+            Objects.requireNonNull
+                    (this.getCommand("referalconnect"))
+                        .setExecutor(new ReferalConnect());
+            Objects.requireNonNull
+                    (this.getCommand("referalreset"))
+                        .setExecutor(new ReferalReset());
+            Objects.requireNonNull
+                    (this.getCommand("referalcode"))
+                        .setExecutor(new ReferalCode());
             Bukkit.getServer().getPluginManager().registerEvents(new Events(), this);
         }
     }

@@ -6,13 +6,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.sql.SQLException;
-
 public class Events implements Listener {
-    ReferalX referalX = new ReferalX();
+    ReferalX referalX = ReferalX.getInstance();
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         try {
-            if(!referalX.SQL.exists(event.getPlayer().getUniqueId().toString())) {
+            if(referalX.SQL.exists(event.getPlayer().getUniqueId().toString())) {
                 Player player = event.getPlayer();
                 String PLAYERNAME = player.getName();
                 String PLAYERUUID = player.getUniqueId().toString();

@@ -10,7 +10,12 @@ import static org.bukkit.ChatColor.GOLD;
 import static org.bukkit.DyeColor.GREEN;
 
 public class ReferalCode implements CommandExecutor {
-    private final ReferalX plugin = new ReferalX();
+    ReferalX plugin = ReferalX.getInstance();
+    /**
+    <<=INFO>=>>
+    Command to get ReferalXCode, /referalCode
+    Works only for Players (NOT CONSOLE)
+     */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
