@@ -2,6 +2,7 @@ package com.vinitshub.referalx;
 import com.vinitshub.referalx.commands.ReferalConnect;
 import com.vinitshub.referalx.commands.ReferalReset;
 import com.vinitshub.referalx.commands.ReferalCode;
+import com.vinitshub.referalx.database.GiftContainer;
 import com.vinitshub.referalx.database.MySQL;
 import com.vinitshub.referalx.events.BukkitEvents;
 import com.vinitshub.referalx.events.LuckPermsEvents;
@@ -19,7 +20,7 @@ import static org.bukkit.ChatColor.*;
 public class ReferalX extends JavaPlugin {
     //SQL Class Instance
     public MySQL SQL;
-
+    public GiftContainer gc;
     //LuckPermsAPI Registration to check for Rank Upgrade
     private static LuckPerms luckPerms;
     public static LuckPerms getLPApi(){return luckPerms;}
@@ -35,6 +36,7 @@ public class ReferalX extends JavaPlugin {
     public void onEnable() {
         Bukkit.getServer().getConsoleSender().sendMessage(GREEN + ">-ReferalX has start-<");
         this.SQL = new MySQL();
+        this.gc = new GiftContainer();
         try {
             SQL.connect();
         } catch (SQLException | ClassNotFoundException throwables) {
