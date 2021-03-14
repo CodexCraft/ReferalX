@@ -138,5 +138,20 @@ public class MySQL {
         return rs.getString("ISLINKED").equalsIgnoreCase("true");
     }
 
+    /**Returns the name of the player who refered the main player IDK man*/
+    public String getLinkedToName(String PLAYERUUID) {
+        try {
+            PreparedStatement ps = getConnection().prepareStatement
+                    ("SELECT LINKEDTO FROM referal WHERE PLAYERNAME=?");
+            ps.setString(1, PLAYERUUID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+                return rs.getString("PLAYERNAME");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     //endregion
 }
