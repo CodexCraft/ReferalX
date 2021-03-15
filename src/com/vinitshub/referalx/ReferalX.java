@@ -7,7 +7,6 @@ import com.vinitshub.referalx.database.MySQL;
 import com.vinitshub.referalx.events.BukkitEvents;
 import com.vinitshub.referalx.events.LuckPermsEvents;
 import net.luckperms.api.LuckPerms;
-import net.luckperms.api.event.LuckPermsEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -59,6 +58,7 @@ public class ReferalX extends JavaPlugin {
             if (provider != null) {
                 luckPerms = provider.getProvider();
             }
+            gc.createFile();
             new LuckPermsEvents(this, luckPerms).register();
             Bukkit.getServer().getPluginManager().registerEvents(new BukkitEvents(), this);
         }
