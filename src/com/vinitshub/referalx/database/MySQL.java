@@ -46,7 +46,7 @@ public class MySQL {
         }
     }
 
-    /**Used to get the instance of the connection to prepare statments and stuff */
+    /**Used to get the instance of the connection to prepare statements and stuff */
     public Connection getConnection() {
         return connection;
     }
