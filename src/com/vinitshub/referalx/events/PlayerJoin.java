@@ -1,15 +1,13 @@
 package com.vinitshub.referalx.events;
 import com.vinitshub.referalx.ReferalX;
-import net.luckperms.api.event.user.track.UserPromoteEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.sql.SQLException;
-import java.util.Optional;
 
-public class BukkitEvents implements Listener {
+public class PlayerJoin implements Listener {
     ReferalX referalX = ReferalX.getInstance();
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){

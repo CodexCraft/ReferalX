@@ -1,10 +1,13 @@
 package com.vinitshub.referalx.database;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MySQL {
-    /*
-    Declaring SQL Variables to connect to the MySQL Database
-     */
+    //Declaring SQL Variables to connect to the MySQL Database
     //region >-Variables-<
     String host = "localhost";
     String daba = "Ref";
@@ -13,12 +16,11 @@ public class MySQL {
     String pass = "root";
     Connection connection;
     //endregion
-    /*
-        Functions used to carry out data processes
-        All SQL Stuff is done here, and then used outside
-        First, I make an constructor of this class in Main Class
-        and then use Main Class's instance using ReferalX#getInstance()
-     */
+
+    //Functions used to carry out data processes
+    //All SQL Stuff is done here, and then used outside
+    //First, I make an constructor of this class in Main Class
+    //and then use Main Class's instance using ReferalX#getInstance()
     //region >-SQL-<
 
     /**Checks if plugin is connected to the SQL Connection */
@@ -153,5 +155,24 @@ public class MySQL {
         return null;
     }
 
+    /** Gets Refers Account and their current Rank*/
+    public List<String> getRefers(String PLAYERNAME){
+        try {
+            PreparedStatement ps = getConnection().prepareStatement
+                    ("SELECT PLAYERNAME FROM referal WHERE LINKEDTO = ?;");
+            Player player = Bukkit.getServer().getPlayer(PLAYERNAME);
+            assert player != null;
+            ps.setInt(1, getCode(player.getUniqueId().toString()));
+            ResultSet rs = ps.executeQuery();
+            List<String> refers = new ArrayList<>();
+            while (rs.next()){
+                refers.add(rs.getString("PLAYERUUID"));
+            }
+            return refers;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
     //endregion
 }

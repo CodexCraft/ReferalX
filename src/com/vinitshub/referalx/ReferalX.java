@@ -1,10 +1,11 @@
 package com.vinitshub.referalx;
 import com.vinitshub.referalx.commands.ReferalConnect;
+import com.vinitshub.referalx.commands.ReferalGifts;
 import com.vinitshub.referalx.commands.ReferalReset;
 import com.vinitshub.referalx.commands.ReferalCode;
 import com.vinitshub.referalx.database.GiftContainer;
 import com.vinitshub.referalx.database.MySQL;
-import com.vinitshub.referalx.events.BukkitEvents;
+import com.vinitshub.referalx.events.PlayerJoin;
 import com.vinitshub.referalx.events.LuckPermsEvents;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
@@ -54,13 +55,17 @@ public class ReferalX extends JavaPlugin {
             Objects.requireNonNull
                     (this.getCommand("referalcode"))
                         .setExecutor(new ReferalCode());
+            Objects.requireNonNull
+                    (this.getCommand("referalgifts"))
+                        .setExecutor(new ReferalGifts());
             RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
             if (provider != null) {
                 luckPerms = provider.getProvider();
             }
             gc.createFile();
             new LuckPermsEvents(this, luckPerms).register();
-            Bukkit.getServer().getPluginManager().registerEvents(new BukkitEvents(), this);
+            Bukkit.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
+            Bukkit.getServer().getPluginManager().registerEvents(new ReferalGifts(), this);
         }
     }
 
