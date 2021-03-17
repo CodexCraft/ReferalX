@@ -126,13 +126,26 @@ public class GiftContainer {
     }
 
     /** Adds gift to player's JSONObject */
-    public void addGift(String PLAYERNAME, String MATERIAL){
-
+    public void addGift(String PLAYERNAME, String MATERIAL, int AMOUNT){
+        JSONObject player = (JSONObject) root.get(PLAYERNAME);
+        int playerSize = player.size();
+        JSONObject item = (JSONObject) player.put("item" + playerSize, "");
+        item.put("MATERIAL", MATERIAL);
+        item.put("AMOUNT", AMOUNT);
     }
 
-    /** Removes all the gifts from player's inventory*/
+    /** Removes all the gifts from player's inventory */
     public void removeGifts(String PLAYERNAME){
         JSONObject player = (JSONObject) root.get(PLAYERNAME);
         player.clear();
+    }
+
+    /** Writes the JSONObject to the file */
+    public void writeAll(){
+        try {
+            GiftContainerJSON.write(root.toJSONString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

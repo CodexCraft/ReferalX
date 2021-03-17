@@ -73,6 +73,7 @@ public class ReferalX extends JavaPlugin {
     @Override
     public void onDisable() {
         Bukkit.getServer().getConsoleSender().sendMessage(RED + ">-ReferalX has stop-<");
+        gc.writeAll();
         if(SQL.isConnected()){
             SQL.disconnect();
         }

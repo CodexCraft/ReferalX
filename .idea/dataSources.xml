@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ref@localhost" uuid="2e7cfb9d-a761-4cc3-93ce-41f620e1347c">
+    <data-source source="LOCAL" name="vinitdb@localhost" uuid="8642043f-e6de-4d59-abab-c6d18e3d35c5">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/ref</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/vinitdb</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
