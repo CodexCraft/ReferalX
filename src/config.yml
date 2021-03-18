@@ -5,13 +5,8 @@ sql:
   user: ""
   pass: ""
 
-#Enter Commands into the [] seperated by a , (Comma)
-#Example: /give %p% minecraft:diamond 64
+#Enter Commands into the [] separated by a , (Comma)
 #Basic Format for Minecraft Give Command
-#/give %P% <ITEM> <AMOUNT>
-# %P% = PLAYER NAME, PLEASE TYPE  %p% WHEREVER YOU NEED TO ADD PLAYER'S NAME
-# <ITEM> = ITEM YOU WANT TO GIVE
-# <AMOUNT> = AMOUNT OF ITEM YOU WANT TO GIVE
 
 rankReward:
   Egg: []

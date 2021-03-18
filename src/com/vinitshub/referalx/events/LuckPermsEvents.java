@@ -1,5 +1,6 @@
 package com.vinitshub.referalx.events;
 
+import com.sun.org.apache.xpath.internal.objects.XBoolean;
 import com.vinitshub.referalx.ReferalX;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.event.EventBus;
@@ -30,6 +31,7 @@ public class LuckPermsEvents {
         if(event.getTrack().getName().equalsIgnoreCase("")){
             Optional<String> promotedToOptional = event.getGroupTo();
             String promotedTo = promotedToOptional.toString();
+            boolean isCrate = false;
             switch(promotedTo){
                 case "Egg":
                     List<String> eggRewardList = plugin.getConfig()
@@ -38,8 +40,11 @@ public class LuckPermsEvents {
                         UUID playerUUID = event.getUser().getUniqueId();
                         Player eventPlayer = Bukkit.getServer().getPlayer(playerUUID);
                         assert eventPlayer != null;
-                        String cmd = s;
-                        cmd = s.replace("%P%", plugin.SQL.getLinkedToName(playerUUID.toString()));
+
+                        if(s.contains("crate")){
+                            isCrate = true;
+                            //ToDo finish this
+                        }
                     }
                     break;
                 case "Chicken":

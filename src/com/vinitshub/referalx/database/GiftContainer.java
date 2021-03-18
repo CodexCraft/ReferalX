@@ -54,7 +54,7 @@ public class GiftContainer {
         ItemMeta closeMeta = close.getItemMeta();
         assert closeMeta != null;
         closeMeta.setDisplayName(BOLD + "" + GOLD + "Close");
-        List<String> closeLore = new ArrayList<String>();
+        List<String> closeLore = new ArrayList<>();
         closeLore.add(GREEN + "Closes the GUI");
         closeMeta.setLore(closeLore);
         close.setItemMeta(closeMeta);
@@ -64,7 +64,7 @@ public class GiftContainer {
         ItemMeta headMeta = head.getItemMeta();
         assert headMeta != null;
         headMeta.setDisplayName(BOLD + "" + GOLD + "Show Referals");
-        List<String> headLore = new ArrayList<String>();
+        List<String> headLore = new ArrayList<>();
         headLore.add(GREEN + "Shows all the players you have referred");
         headMeta.setLore(headLore);
         head.setItemMeta(headMeta);
@@ -108,10 +108,57 @@ public class GiftContainer {
         //Looping through all items in the Player JSONObject
         for (int i = 0; i < player.size(); i++) {
             JSONObject item = (JSONObject) player.get(i);
+
             String MATERIAL = (String) item.get("MATERIAL");
+            String FROM = (String) item.get("FROM");
             int AMOUNT = (int) item.get("AMOUNT");
-            ItemStack giftItem = new ItemStack(Objects.requireNonNull(Material.getMaterial(MATERIAL)), AMOUNT);
-            inv.setItem(i, giftItem);
+
+            if(!MATERIAL.contains("/crate")) {
+                ItemStack giftItem = new ItemStack(
+                        Objects.requireNonNull(Material.getMaterial(MATERIAL)), AMOUNT);
+                ItemMeta giftItemMeta = giftItem.getItemMeta();
+                List<String> lore = new ArrayList<>();
+                lore.add(GREEN + "from " + GOLD + BOLD + FROM);
+                inv.setItem(i, giftItem);
+            }
+            else{
+                if(MATERIAL.toLowerCase().contains("pet")){
+                    ItemStack giftItem = new ItemStack(Material.NETHER_STAR, AMOUNT);
+                    ItemMeta giftItemMeta = giftItem.getItemMeta();
+                    List<String> lore = new ArrayList<>();
+                    lore.add(GREEN + "from " + GOLD + BOLD + FROM);
+                    giftItemMeta.setDisplayName(RED + "Pet Crate Key");
+                    giftItem.setItemMeta(giftItemMeta);
+                    inv.setItem(i, giftItem);
+                }
+                else if(MATERIAL.toLowerCase().contains("vip")){
+                    ItemStack giftItem = new ItemStack(Material.NETHER_STAR, AMOUNT);
+                    ItemMeta giftItemMeta = giftItem.getItemMeta();
+                    List<String> lore = new ArrayList<>();
+                    lore.add(GREEN + "from " + GOLD + BOLD + FROM);
+                    giftItemMeta.setDisplayName(RED + "VIP Crate Key");
+                    giftItem.setItemMeta(giftItemMeta);
+                    inv.setItem(i, giftItem);
+                }
+                else if(MATERIAL.toLowerCase().contains("Donator")){
+                    ItemStack giftItem = new ItemStack(Material.NETHER_STAR, AMOUNT);
+                    ItemMeta giftItemMeta = giftItem.getItemMeta();
+                    List<String> lore = new ArrayList<>();
+                    lore.add(GREEN + "from " + GOLD + BOLD + FROM);
+                    giftItemMeta.setDisplayName(RED + "Donator Crate Key");
+                    giftItem.setItemMeta(giftItemMeta);
+                    inv.setItem(i, giftItem);
+                }
+                else if(MATERIAL.toLowerCase().contains("vote")){
+                    ItemStack giftItem = new ItemStack(Material.NETHER_STAR, AMOUNT);
+                    ItemMeta giftItemMeta = giftItem.getItemMeta();
+                    List<String> lore = new ArrayList<>();
+                    lore.add(GREEN + "from " + GOLD + BOLD + FROM);
+                    giftItemMeta.setDisplayName(RED + "Vote Crate Key");
+                    giftItem.setItemMeta(giftItemMeta);
+                    inv.setItem(i, giftItem);
+                }
+            }
         }
         //endregion
 
@@ -126,12 +173,13 @@ public class GiftContainer {
     }
 
     /** Adds gift to player's JSONObject */
-    public void addGift(String PLAYERNAME, String MATERIAL, int AMOUNT){
+    public void addGift(String PLAYERNAME, String MATERIAL, int AMOUNT, String FROM){
         JSONObject player = (JSONObject) root.get(PLAYERNAME);
         int playerSize = player.size();
         JSONObject item = (JSONObject) player.put("item" + playerSize, "");
         item.put("MATERIAL", MATERIAL);
         item.put("AMOUNT", AMOUNT);
+        item.put("FROM", FROM);
     }
 
     /** Removes all the gifts from player's inventory */

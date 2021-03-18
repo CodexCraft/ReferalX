@@ -115,14 +115,24 @@ public class MySQL {
     }
 
     /**Gets the LinkedCode to give the rewards to player, used in com.vinitshub.referalx.events.Events */
-    public int getLinkedTo(String PLAYERUUID) throws SQLException {
+    public String getLinkedTo(String PLAYERUUID) throws SQLException {
         PreparedStatement ps = getConnection().prepareStatement
                 ("SELECT LINKEDTO FROM referal WHERE PLAYERUUID=?");
         ps.setString(1, PLAYERUUID);
         ResultSet rs = ps.executeQuery();
+        int linkedToCode = 0;
+
         if(rs.next())
-        return rs.getInt("LINKEDTO");
-        return 0;
+        linkedToCode =  rs.getInt("LINKEDTO");
+
+        if(linkedToCode != 0) {
+            PreparedStatement ps2 = getConnection().prepareStatement
+                    ("SELECT PLAYERNAME FROM referal WHERE LINKEDTO=?");
+            ps2.setInt(1, linkedToCode);
+            ResultSet rs2 = ps2.executeQuery();
+            return rs2.getString("PLAYERNAME");
+        }
+        return null;
     }
 
     /**Resets the LinkedCode (Used as command /referalReset) used in com.vinitshub.referalx.events.Events */

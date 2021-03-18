@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.sql.SQLException;
+import java.util.Locale;
 
 public class PlayerJoin implements Listener {
     ReferalX referalX = ReferalX.getInstance();

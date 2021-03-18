@@ -34,7 +34,7 @@ public class ReferalX extends JavaPlugin {
     //Executed when plugin enables
     @Override
     public void onEnable() {
-        Bukkit.getServer().getConsoleSender().sendMessage(GREEN + ">-ReferalX has start-<");
+        Bukkit.getServer().getConsoleSender().sendMessage(GREEN + ">-ReferalX has started-<");
         this.SQL = new MySQL();
         this.gc = new GiftContainer();
         try {
@@ -43,7 +43,6 @@ public class ReferalX extends JavaPlugin {
             Bukkit.getServer().getConsoleSender().sendMessage(RED + ">-Referal Database Not Connected-<");
         }
         if(SQL.isConnected()){
-            Bukkit.getServer().getConsoleSender().sendMessage(GREEN + ">-Referal Database Connected-<");
             instance = this;
             SQL.createTable();
             Objects.requireNonNull
