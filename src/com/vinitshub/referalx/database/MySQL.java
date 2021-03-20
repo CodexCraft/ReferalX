@@ -8,19 +8,21 @@ import java.util.List;
 
 public class MySQL {
     //Declaring SQL Variables to connect to the MySQL Database
+
     //region >-Variables-<
-    String host = "localhost";
-    String daba = "Ref";
-    String port = "3306";
-    String user = "root";
-    String pass = "root";
+    String host = "mysql.mcprohosting.com";
+    String daba = "server_991471_5ce9a28a";
+    String user = "server_991471";
+    String pass = "OD1x*ajbRfS5JZcyFAkIHiu";
     Connection connection;
     //endregion
+
 
     //Functions used to carry out data processes
     //All SQL Stuff is done here, and then used outside
     //First, I make an constructor of this class in Main Class
     //and then use Main Class's instance using ReferalX#getInstance()
+
     //region >-SQL-<
 
     /**Checks if plugin is connected to the SQL Connection */
@@ -32,7 +34,7 @@ public class MySQL {
     public void connect() throws SQLException, ClassNotFoundException {
         if (!isConnected()) {
             connection = DriverManager.getConnection("jdbc:mysql://" +
-                            host + ":" + port + "/" + daba + "?useSSL=false",
+                            host + "/" + daba + "?useSSL=false",
                     user, pass);
         }
     }
@@ -62,6 +64,7 @@ public class MySQL {
                     "    PLAYERUUID VARCHAR(255) NOT NULL," +
                     "    ISLINKED VARCHAR(5) NOT NULL," +
                     "    LINKEDTO INT," +
+                    "    REWARDCLAIMED VARCHAR(5)," +
                     "    PRIMARY KEY (ID)" +
                     ")AUTO_INCREMENT=1000;");
             ps.executeUpdate();
@@ -115,30 +118,32 @@ public class MySQL {
     }
 
     /**Gets the LinkedCode to give the rewards to player, used in com.vinitshub.referalx.events.Events */
-    public String getLinkedTo(String PLAYERUUID) throws SQLException {
-        PreparedStatement ps = getConnection().prepareStatement
-                ("SELECT LINKEDTO FROM referal WHERE PLAYERUUID=?");
-        ps.setString(1, PLAYERUUID);
-        ResultSet rs = ps.executeQuery();
-        int linkedToCode = 0;
+    public String getLinkedTo(String PLAYERUUID) {
+        PreparedStatement ps = null;
+        try {
+            ps = getConnection().prepareStatement
+                    ("SELECT LINKEDTO FROM referal WHERE PLAYERUUID=?");
 
-        if(rs.next())
-        linkedToCode =  rs.getInt("LINKEDTO");
+            ps.setString(1, PLAYERUUID);
+            ResultSet rs = ps.executeQuery();
+            int linkedToCode = 0;
 
-        if(linkedToCode != 0) {
-            PreparedStatement ps2 = getConnection().prepareStatement
-                    ("SELECT PLAYERNAME FROM referal WHERE LINKEDTO=?");
-            ps2.setInt(1, linkedToCode);
-            ResultSet rs2 = ps2.executeQuery();
-            return rs2.getString("PLAYERNAME");
+            if(rs.next())
+                linkedToCode =  rs.getInt("LINKEDTO");
+
+            if(linkedToCode != 0) {
+                PreparedStatement ps2 = getConnection().prepareStatement
+                        ("SELECT PLAYERNAME FROM referal WHERE LINKEDTO=?");
+                ps2.setInt(1, linkedToCode);
+                ResultSet rs2 = ps2.executeQuery();
+                return rs2.getString("PLAYERNAME");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return null;
     }
 
-    /**Resets the LinkedCode (Used as command /referalReset) used in com.vinitshub.referalx.events.Events */
-    public void resetLinked(String PLAYERUUID) throws SQLException {
-        setLinkedTo(PLAYERUUID, 0);
-    }
 
     /**Returns if the Player has linked their account to others */
     public boolean isLinked(String PLAYERUUID) throws SQLException {
@@ -148,21 +153,6 @@ public class MySQL {
         ResultSet rs = ps.executeQuery();
         rs.next();
         return rs.getString("ISLINKED").equalsIgnoreCase("true");
-    }
-
-    /**Returns the name of the player who refered the main player IDK man*/
-    public String getLinkedToName(String PLAYERUUID) {
-        try {
-            PreparedStatement ps = getConnection().prepareStatement
-                    ("SELECT LINKEDTO FROM referal WHERE PLAYERNAME=?");
-            ps.setString(1, PLAYERUUID);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next())
-                return rs.getString("PLAYERNAME");
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
     /** Gets Refers Account and their current Rank*/
@@ -183,6 +173,11 @@ public class MySQL {
             throwables.printStackTrace();
         }
         return null;
+    }
+
+    /** Updates the Refers account so they cant give the rewards to someone else again and again*/
+    public void updateRewardClaim(String PLAYERUUID, boolean claimStatus){
+
     }
     //endregion
 }

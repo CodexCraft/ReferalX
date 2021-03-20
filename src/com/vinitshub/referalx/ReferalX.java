@@ -1,9 +1,8 @@
 package com.vinitshub.referalx;
 import com.vinitshub.referalx.commands.ReferalConnect;
 import com.vinitshub.referalx.commands.ReferalGifts;
-import com.vinitshub.referalx.commands.ReferalReset;
 import com.vinitshub.referalx.commands.ReferalCode;
-import com.vinitshub.referalx.database.GiftContainer;
+import com.vinitshub.referalx.database.GiftContainerX;
 import com.vinitshub.referalx.database.MySQL;
 import com.vinitshub.referalx.events.PlayerJoin;
 import com.vinitshub.referalx.events.LuckPermsEvents;
@@ -20,7 +19,7 @@ import static org.bukkit.ChatColor.*;
 public class ReferalX extends JavaPlugin {
     //SQL Class Instance
     public MySQL SQL;
-    public GiftContainer gc;
+    public GiftContainerX gc;
     //LuckPermsAPI Registration to check for Rank Upgrade
     private static LuckPerms luckPerms;
     public static LuckPerms getLPApi(){return luckPerms;}
@@ -36,7 +35,7 @@ public class ReferalX extends JavaPlugin {
     public void onEnable() {
         Bukkit.getServer().getConsoleSender().sendMessage(GREEN + ">-ReferalX has started-<");
         this.SQL = new MySQL();
-        this.gc = new GiftContainer();
+        this.gc = new GiftContainerX();
         try {
             SQL.connect();
         } catch (SQLException | ClassNotFoundException throwables) {
@@ -48,9 +47,6 @@ public class ReferalX extends JavaPlugin {
             Objects.requireNonNull
                     (this.getCommand("referalconnect"))
                         .setExecutor(new ReferalConnect());
-            Objects.requireNonNull
-                    (this.getCommand("referalreset"))
-                        .setExecutor(new ReferalReset());
             Objects.requireNonNull
                     (this.getCommand("referalcode"))
                         .setExecutor(new ReferalCode());
@@ -66,12 +62,13 @@ public class ReferalX extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
             Bukkit.getServer().getPluginManager().registerEvents(new ReferalGifts(), this);
         }
+        saveDefaultConfig();
     }
 
     //Executed when plugin disable
     @Override
     public void onDisable() {
-        Bukkit.getServer().getConsoleSender().sendMessage(RED + ">-ReferalX has stop-<");
+        Bukkit.getServer().getConsoleSender().sendMessage(RED + ">-ReferalX has stopped-<");
         gc.writeAll();
         if(SQL.isConnected()){
             SQL.disconnect();

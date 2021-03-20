@@ -7,9 +7,17 @@ sql:
 
 #Enter Commands into the [] separated by a , (Comma)
 #Basic Format for Minecraft Give Command
+#If its a vanilla item just type its name with the amount like the example given below
+# Egg: [DIAMOND 64, EMERALD 64]
+#If its a command, just type it out
+# Egg: [/crate give to %p% lucifer 12]
+
+#If you wanna use both do it like
+# Egg: [/crate give to %p% lucifer 12, DIAMOND 64, EMERALD 64, /give minecraft:stone %p% 64]
+
 
 rankReward:
-  Egg: []
+  Egg: [/crate give to %p% lucifer 12 CMD]
   Chicken: []
   Wolf: []
   Lion: []

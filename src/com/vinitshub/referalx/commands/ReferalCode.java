@@ -28,7 +28,7 @@ public class ReferalCode implements CommandExecutor {
                     sender.sendMessage
                             (GREEN + "Ask your friends to do /referalConnect " + GOLD + code);
                     sender.sendMessage
-                            (GREEN + "And everytime they rank up using /rankup, both of you get rewards");
+                            (GREEN + "And everytime they rank up using  /rankup, both of you get rewards");
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

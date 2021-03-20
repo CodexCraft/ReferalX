@@ -8,8 +8,7 @@ import org.bukkit.entity.Player;
 import java.sql.SQLException;
 
 import static java.lang.Integer.parseInt;
-import static org.bukkit.ChatColor.GOLD;
-import static org.bukkit.ChatColor.GREEN;
+import static org.bukkit.ChatColor.*;
 
 public class ReferalConnect implements CommandExecutor {
     ReferalX plugin = ReferalX.getInstance();
@@ -19,13 +18,20 @@ public class ReferalConnect implements CommandExecutor {
             Player player = (Player) sender;
             String PLAYERUUID = player.getUniqueId().toString();
             try {
-                plugin.SQL.setLinkedTo(PLAYERUUID, parseInt(args[0]));
-                sender.sendMessage
-                        (GREEN + "You have linked your account to " + GOLD + args[0]);
+                if(!plugin.SQL.isLinked(PLAYERUUID)) {
+                    plugin.SQL.setLinkedTo(PLAYERUUID, parseInt(args[0]));
+                    sender.sendMessage
+                            (GREEN + "You have linked your account to " + GOLD + args[0]);
+
+                }else{
+                    sender.sendMessage
+                            (RED + "You can only link your account once");
+                }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
         }else{
+
             sender.sendMessage("Only player can execute the command");
         }
         return false;

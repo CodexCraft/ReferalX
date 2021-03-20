@@ -1,22 +1,26 @@
 {
   "user1":{
-    "item1":{
-      "MATERIAL": "DIAMOND",
-      "AMOUNT": 1
-    },
-    "item2":{
-      "MATERIAL": "EMERALD",
-      "AMOUNT": 1
+    "referEd": {
+      "item1":{
+        "MATERIAL": "DIAMOND",
+        "AMOUNT": 1
+      },
+      "item2":{
+        "MATERIAL": "EMERALD",
+        "AMOUNT": 1
+      }
     }
   },
   "user2":{
-    "item1":{
-      "MATERIAL": "DIAMOND",
-      "AMOUNT": 1
-    },
-    "item2":{
-      "MATERIAL": "EMERALD",
-      "AMOUNT": 1
+    "referEd": {
+      "item1":{
+        "MATERIAL": "DIAMOND",
+        "AMOUNT": 1
+      },
+      "item2":{
+        "MATERIAL": "EMERALD",
+        "AMOUNT": 1
+      }
     }
   }
 }

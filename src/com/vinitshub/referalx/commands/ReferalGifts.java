@@ -2,23 +2,20 @@ package com.vinitshub.referalx.commands;
 
 import com.vinitshub.referalx.ReferalX;
 import net.luckperms.api.LuckPerms;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+
 import java.util.List;
 import java.util.Objects;
 
-import static net.md_5.bungee.api.ChatColor.GREEN;
-import static org.bukkit.ChatColor.RED;
+import static org.bukkit.ChatColor.*;
 
 public class ReferalGifts implements CommandExecutor, Listener {
     public ReferalX plugin = ReferalX.getInstance();
@@ -51,39 +48,7 @@ public class ReferalGifts implements CommandExecutor, Listener {
             event.setCancelled(true);
             switch (event.getCurrentItem().getType()) {
                 case ENCHANTED_GOLDEN_APPLE:
-                    for (int i = 0; i < 36; i++) {
-                        if(inv.getItem(i).getItemMeta().getDisplayName().contains("Crate Key")){
-                            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-                            switch (inv.getItem(i).getItemMeta().getDisplayName()) {
-                                case "Pet Crate Key":
-                                    Bukkit.dispatchCommand
-                                            (console, "/crate give to " +
-                                                    event.getWhoClicked().getName() + " pet " +
-                                                    inv.getItem(i).getAmount());
-                                case "VIP Crate Key":
-                                    Bukkit.dispatchCommand
-                                            (console, "/crate give to " +
-                                                    event.getWhoClicked().getName() + " vip " +
-                                                    inv.getItem(i).getAmount());
-                                break;
-                                case "Donator Crate Key":
-                                    Bukkit.dispatchCommand
-                                            (console, "/crate give to " +
-                                                    event.getWhoClicked().getName() + " donator " +
-                                                    inv.getItem(i).getAmount());
-                                    break;
-                                case "Vote Crate Key":
-                                    Bukkit.dispatchCommand
-                                            (console, "/crate give to " +
-                                                    event.getWhoClicked().getName() + " vote " +
-                                                    inv.getItem(i).getAmount());
-                                    break;
-                            }
-                        }else {
-                            event.getWhoClicked().getWorld()
-                                    .dropItemNaturally(event.getWhoClicked().getLocation(), inv.getItem(i));
-                        }
-                    }
+                    plugin.gc.giveReward((Player) event.getWhoClicked());
                     plugin.gc.removeGifts(event.getWhoClicked().getName());
                     break;
                 case PLAYER_HEAD:

@@ -1,29 +1,30 @@
 package com.vinitshub.referalx.database;
+
 import com.vinitshub.referalx.ReferalX;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONObject;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import static net.md_5.bungee.api.ChatColor.*;
+import static org.bukkit.ChatColor.*;
+import static org.bukkit.ChatColor.RED;
 
-public class GiftContainer {
-
+public class GiftContainerX {
     public Inventory inv;
     public FileWriter GiftContainerJSON;
     public JSONObject root = new JSONObject();
     private final ReferalX plugin = ReferalX.getInstance();
+
 
     /** Creates the JSON File everytime the plugin starts */
     public void createFile(){
@@ -104,61 +105,12 @@ public class GiftContainer {
 
         //Gets Player JSONObject from GiftContainer.json
         JSONObject player = getGifts(PLAYERNAME);
-
-        //Looping through all items in the Player JSONObject
         for (int i = 0; i < player.size(); i++) {
-            JSONObject item = (JSONObject) player.get(i);
-
-            String MATERIAL = (String) item.get("MATERIAL");
-            String FROM = (String) item.get("FROM");
-            int AMOUNT = (int) item.get("AMOUNT");
-
-            if(!MATERIAL.contains("/crate")) {
-                ItemStack giftItem = new ItemStack(
-                        Objects.requireNonNull(Material.getMaterial(MATERIAL)), AMOUNT);
-                ItemMeta giftItemMeta = giftItem.getItemMeta();
-                List<String> lore = new ArrayList<>();
-                lore.add(GREEN + "from " + GOLD + BOLD + FROM);
-                inv.setItem(i, giftItem);
-            }
-            else{
-                if(MATERIAL.toLowerCase().contains("pet")){
-                    ItemStack giftItem = new ItemStack(Material.NETHER_STAR, AMOUNT);
-                    ItemMeta giftItemMeta = giftItem.getItemMeta();
-                    List<String> lore = new ArrayList<>();
-                    lore.add(GREEN + "from " + GOLD + BOLD + FROM);
-                    giftItemMeta.setDisplayName(RED + "Pet Crate Key");
-                    giftItem.setItemMeta(giftItemMeta);
-                    inv.setItem(i, giftItem);
-                }
-                else if(MATERIAL.toLowerCase().contains("vip")){
-                    ItemStack giftItem = new ItemStack(Material.NETHER_STAR, AMOUNT);
-                    ItemMeta giftItemMeta = giftItem.getItemMeta();
-                    List<String> lore = new ArrayList<>();
-                    lore.add(GREEN + "from " + GOLD + BOLD + FROM);
-                    giftItemMeta.setDisplayName(RED + "VIP Crate Key");
-                    giftItem.setItemMeta(giftItemMeta);
-                    inv.setItem(i, giftItem);
-                }
-                else if(MATERIAL.toLowerCase().contains("Donator")){
-                    ItemStack giftItem = new ItemStack(Material.NETHER_STAR, AMOUNT);
-                    ItemMeta giftItemMeta = giftItem.getItemMeta();
-                    List<String> lore = new ArrayList<>();
-                    lore.add(GREEN + "from " + GOLD + BOLD + FROM);
-                    giftItemMeta.setDisplayName(RED + "Donator Crate Key");
-                    giftItem.setItemMeta(giftItemMeta);
-                    inv.setItem(i, giftItem);
-                }
-                else if(MATERIAL.toLowerCase().contains("vote")){
-                    ItemStack giftItem = new ItemStack(Material.NETHER_STAR, AMOUNT);
-                    ItemMeta giftItemMeta = giftItem.getItemMeta();
-                    List<String> lore = new ArrayList<>();
-                    lore.add(GREEN + "from " + GOLD + BOLD + FROM);
-                    giftItemMeta.setDisplayName(RED + "Vote Crate Key");
-                    giftItem.setItemMeta(giftItemMeta);
-                    inv.setItem(i, giftItem);
-                }
-            }
+            ItemStack referChest = new ItemStack(Material.CHEST);
+            ItemMeta referChestMeta = referChest.getItemMeta();
+            referChestMeta.setDisplayName(GOLD + String.valueOf(player.get(i)));
+            referChest.setItemMeta(referChestMeta);
+            inv.setItem(i, referChest);
         }
         //endregion
 
@@ -175,8 +127,11 @@ public class GiftContainer {
     /** Adds gift to player's JSONObject */
     public void addGift(String PLAYERNAME, String MATERIAL, int AMOUNT, String FROM){
         JSONObject player = (JSONObject) root.get(PLAYERNAME);
-        int playerSize = player.size();
-        JSONObject item = (JSONObject) player.put("item" + playerSize, "");
+        JSONObject referer = (JSONObject) player.get(FROM);
+
+        int referSize = referer.size();
+
+        JSONObject item = (JSONObject) referer.put("item" + referSize, "");
         item.put("MATERIAL", MATERIAL);
         item.put("AMOUNT", AMOUNT);
         item.put("FROM", FROM);
@@ -195,5 +150,29 @@ public class GiftContainer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /** Gives Reward to Player*/
+    public void giveReward(Player player){
+        JSONObject playerJSON = plugin.gc.getGifts(player.getName());
+        for (int i = 0; i < playerJSON.size(); i++) {
+            String MATERIAL = (String) playerJSON.get("MATERIAL");
+            int AMOUNT = (int) playerJSON.get("AMOUNT");
+
+            if(MATERIAL.contains("Crate Key")){
+                runCommand(MATERIAL);
+            }else {
+                if(Material.getMaterial(MATERIAL) != null) {
+                    ItemStack item = new ItemStack(Material.getMaterial(MATERIAL), AMOUNT);
+                    player.getWorld().dropItem(player.getLocation(), item);
+                }
+            }
+        }
+    }
+
+    /** Runs Commands*/
+    public void runCommand(String cmd){
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        Bukkit.getServer().dispatchCommand(console, cmd);
     }
 }
